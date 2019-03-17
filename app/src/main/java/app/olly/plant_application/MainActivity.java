@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -43,11 +44,16 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.ItemCli
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         Plant plant = new Plant(new PlantType(R.drawable.first,1000, "ficus" ), R.drawable.first, 1000, "bodka");
+        Plant plant2 =  new Plant(new PlantType(R.drawable.first,1000, "kaktus" ), R.drawable.second, 1000, "alenka");
         ArrayList<Plant> plants = new ArrayList<>();
+        plants.add(plant2);
         plants.add(plant);
         adapter = new MyAdapter(this, plants);
         adapter.setOnClickListener(this);
         recyclerView.setAdapter(adapter);
+
+        TextView testTextView = findViewById(R.id.textView);
+        testTextView.setText(String.valueOf(recyclerView.getAdapter().getItemCount()));
 
     }
 
