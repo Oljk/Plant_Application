@@ -1,8 +1,8 @@
 package app.olly.plant_application;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import app.olly.plant_application.sdata.DefaultPlant;
 import app.olly.plant_application.sdata.MyDBHelper;
 import app.olly.plant_application.sdata.Plant;
 import app.olly.plant_application.sdata.PlantType;
@@ -37,8 +38,9 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.ItemCli
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent = new Intent(MainActivity.this, EditActivity.class);
+                intent.putExtra("data", DefaultPlant.CONST_CREATE);
+                startActivity(intent);
             }
         });
         dbhelper = new MyDBHelper(this);
@@ -48,8 +50,8 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.ItemCli
         Plant plant = new Plant(new PlantType(R.drawable.first,1000, "ficus" , 3), R.drawable.first, 1000, "bodka", 5);
         Plant plant2 =  new Plant(new PlantType(R.drawable.first,1000, "kaktus", 2 ), R.drawable.second, 1000, "alenka", 10);
         ArrayList<Plant> plants = new ArrayList<>();
-        plants.add(plant2);
         plants.add(plant);
+        plants.add(plant2);
         adapter = new MyAdapter(this, plants);
         adapter.setOnClickListener(this);
         recyclerView.setAdapter(adapter);

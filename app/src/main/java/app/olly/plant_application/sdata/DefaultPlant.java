@@ -4,6 +4,8 @@ package app.olly.plant_application.sdata;
  * structure of plant
  * */
 public abstract class DefaultPlant {
+
+    public static final String CONST_CREATE= "create";
     /**
      * Generating id for unique objects
      */
@@ -25,7 +27,7 @@ public abstract class DefaultPlant {
          */
         String name;
 
-        public DefaultPlant() {
+    public DefaultPlant() {
         }
 
         public DefaultPlant(int image, int period, String name, int id) {

@@ -1,5 +1,7 @@
 package app.olly.plant_application.sdata;
 
+import java.util.Date;
+
 import app.olly.plant_application.R;
 
 /*
@@ -11,6 +13,10 @@ public class Plant extends DefaultPlant {
      * link to the planttype
      */
     PlantType plantType;
+    /**
+     * Last time of water
+     */
+    Date last_time;
 
     static int CONST_WEEK = 7*24*60*60;
     static int CONST_THREE_DAYS = 3*24*60*60;

@@ -11,12 +11,12 @@ public class MyDBHelper extends SQLiteOpenHelper {
         public final static String TABLE_NAME = "plants";
         public final static String COLUMN_PLANT_NAME = "name";
         public final static String COLUMN_PLANT_IMAGE = "image";
+        /**
+         * if null - it is plant type
+         */
         public final static String COLUMN_PLANT_TYPE = "ptype";
         public final static String COLUMN_ID = "id";
-        /**
-         * 0 - it is a simple plant , 1 - plant type
-         */
-        public final static String COLUMN_SI_P_TYPE = "is_p_type";
+        public final static String COlUMN_WATER_TIME = "water_time";
     }
 
 
@@ -32,6 +32,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
         String SQL_CREATE_TABLE = "CREATE TABLE " + PlantsTable.TABLE_NAME + " ("
                 + PlantsTable.COLUMN_PLANT_NAME + " TEXT NOT NULL, "
                 + PlantsTable.COLUMN_PLANT_IMAGE + " TEXT NOT NULL, "
+                + PlantsTable.COlUMN_WATER_TIME + " TEXT NOT NULL, "
                 + PlantsTable.COLUMN_PLANT_TYPE + " INTEGER, "
                 + PlantsTable.COLUMN_ID + " INTEGER NOT NULL );";
         db.execSQL(SQL_CREATE_TABLE);
