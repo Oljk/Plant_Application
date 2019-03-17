@@ -5,8 +5,8 @@ package app.olly.plant_application.sdata;
  * */
 public class PlantType extends DefaultPlant {
 
-    public PlantType(int image, int period, String name) {
-        super(image, period, name);
+    public PlantType(int image, int period, String name, int id) {
+        super(image, period, name, id);
     }
 
 }

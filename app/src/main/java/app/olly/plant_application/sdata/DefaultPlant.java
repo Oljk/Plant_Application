@@ -4,6 +4,10 @@ package app.olly.plant_application.sdata;
  * structure of plant
  * */
 public abstract class DefaultPlant {
+    /**
+     * Generating id for unique objects
+     */
+        int id;
 
         /**
          * image of item
@@ -24,10 +28,11 @@ public abstract class DefaultPlant {
         public DefaultPlant() {
         }
 
-        public DefaultPlant(int image, int period, String name) {
+        public DefaultPlant(int image, int period, String name, int id) {
             this.image = image;
             this.period = period;
             this.name = name;
+            this.id = id;
         }
 
 
@@ -53,6 +58,10 @@ public abstract class DefaultPlant {
 
         public void setName(String name) {
             this.name = name;
+        }
+
+        public int generateNewId(int prevMax) {
+            return prevMax + 1;
         }
 
     }

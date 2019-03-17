@@ -15,8 +15,8 @@ public class Plant extends DefaultPlant {
     static int CONST_WEEK = 7*24*60*60;
     static int CONST_THREE_DAYS = 3*24*60*60;
 
-    public Plant(PlantType plantType, int image, int period, String name) {
-        super(image, period, name);
+    public Plant(PlantType plantType, int image, int period, String name, int id) {
+        super(image, period, name, id);
         setPlantType(plantType);
     }
 
@@ -31,9 +31,9 @@ public class Plant extends DefaultPlant {
         setPlantType(plantType);
     }
 
-    public Plant(int period) {
+    public Plant(int period, int id) {
         this.period = period;
-        createOwnPlantType();
+        createOwnPlantType(id);
     }
 
     public void setPlantType(PlantType plantType) {
@@ -44,8 +44,8 @@ public class Plant extends DefaultPlant {
         return plantType;
     }
 
-    private void createOwnPlantType() {
-        this.plantType = new PlantType(R.drawable.first,1000, "ficus" );
+    private void createOwnPlantType(int id) {
+        this.plantType = new PlantType(R.drawable.first,1000, "ficus", id );
         //   this.plantType.setImage();   // не забыть добаивть картинку
         this.period = CONST_THREE_DAYS;
     }

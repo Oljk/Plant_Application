@@ -15,10 +15,12 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import app.olly.plant_application.sdata.MyDBHelper;
 import app.olly.plant_application.sdata.Plant;
 import app.olly.plant_application.sdata.PlantType;
 
-public class MainActivity extends AppCompatActivity implements MyAdapter.ItemClickListener{
+public class MainActivity extends AppCompatActivity implements MyAdapter.ItemClickListener {
+    private MyDBHelper dbhelper;
     RecyclerView recyclerView;
     private MyAdapter adapter;
     RecyclerView.LayoutManager layoutManager;
@@ -39,12 +41,12 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.ItemCli
                         .setAction("Action", null).show();
             }
         });
-
+        dbhelper = new MyDBHelper(this);
         recyclerView = findViewById(R.id.mylist);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        Plant plant = new Plant(new PlantType(R.drawable.first,1000, "ficus" ), R.drawable.first, 1000, "bodka");
-        Plant plant2 =  new Plant(new PlantType(R.drawable.first,1000, "kaktus" ), R.drawable.second, 1000, "alenka");
+        Plant plant = new Plant(new PlantType(R.drawable.first,1000, "ficus" , 3), R.drawable.first, 1000, "bodka", 5);
+        Plant plant2 =  new Plant(new PlantType(R.drawable.first,1000, "kaktus", 2 ), R.drawable.second, 1000, "alenka", 10);
         ArrayList<Plant> plants = new ArrayList<>();
         plants.add(plant2);
         plants.add(plant);
