@@ -17,6 +17,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
         public final static String COLUMN_PLANT_TYPE = "ptype";
         public final static String COLUMN_ID = "id";
         public final static String COlUMN_WATER_TIME = "water_time";
+        public final static String COLUMN_PERIOD = "period";
     }
 
 
@@ -34,6 +35,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
                 + PlantsTable.COLUMN_PLANT_IMAGE + " TEXT NOT NULL, "
                 + PlantsTable.COlUMN_WATER_TIME + " TEXT NOT NULL, "
                 + PlantsTable.COLUMN_PLANT_TYPE + " INTEGER, "
+                + PlantsTable.COLUMN_PERIOD + " INTEGER, "
                 + PlantsTable.COLUMN_ID + " INTEGER NOT NULL );";
         db.execSQL(SQL_CREATE_TABLE);
     }

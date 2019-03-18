@@ -14,11 +14,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import app.olly.plant_application.sdata.DefaultPlant;
 import app.olly.plant_application.sdata.MyDBHelper;
 import app.olly.plant_application.sdata.Plant;
-import app.olly.plant_application.sdata.PlantType;
 
 public class MainActivity extends AppCompatActivity implements MyAdapter.ItemClickListener {
     private MyDBHelper dbhelper;
@@ -47,8 +47,8 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.ItemCli
         recyclerView = findViewById(R.id.mylist);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        Plant plant = new Plant(new PlantType(R.drawable.first,1000, "ficus" , 3), R.drawable.first, 1000, "bodka", 5);
-        Plant plant2 =  new Plant(new PlantType(R.drawable.first,1000, "kaktus", 2 ), R.drawable.second, 1000, "alenka", 10);
+        Plant plant = new Plant(R.drawable.first, 1000, "bodka", 1,new Date(), "ficus");
+        Plant plant2 =  new Plant(R.drawable.second, 1000, "alenka", 10,new Date(), "kaktus");
         ArrayList<Plant> plants = new ArrayList<>();
         plants.add(plant);
         plants.add(plant2);

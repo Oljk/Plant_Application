@@ -91,7 +91,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>  {
          */
         public void updatePlant() {
             TextViewName.setText(plant.getName());
-            TextViewPlantType.setText(plant.getPlantType().getName());
+            TextViewPlantType.setText(plant.getPlantTypeName());
             imageView.setImageResource(plant.getImage());
         }
 
