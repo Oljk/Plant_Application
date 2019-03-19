@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="16dp"
+    android:longClickable="true"
     >
 
 
@@ -11,7 +12,8 @@
         android:id="@+id/plant_image"
         android:layout_width="102dp"
         android:layout_height="82dp"
-        tools:srcCompat="@tools:sample/backgrounds/scenic[2]" />
+        tools:srcCompat="@tools:sample/backgrounds/scenic[2]"
+        android:contentDescription="Plant" />
 
     <LinearLayout
         android:layout_width="match_parent"

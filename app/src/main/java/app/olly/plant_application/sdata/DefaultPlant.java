@@ -62,8 +62,15 @@ public abstract class DefaultPlant {
             this.name = name;
         }
 
-        public int generateNewId(int prevMax) {
+        public static int generateNewId(int prevMax) {
             return prevMax + 1;
         }
 
-    }
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+}

@@ -49,7 +49,7 @@ public class EditActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 long numberOfRows = DatabaseUtils.queryNumEntries(db, MyDBHelper.PlantsTable.TABLE_NAME);
-                int id = (int) numberOfRows + 1;
+                int id = DefaultPlant.generateNewId((int) numberOfRows);
                 ContentValues values = new ContentValues();
                 values.put(MyDBHelper.PlantsTable.COLUMN_PLANT_NAME, name.getText().toString());
                 values.put(MyDBHelper.PlantsTable.COLUMN_ID, id);
@@ -58,8 +58,9 @@ public class EditActivity extends AppCompatActivity {
                 Date date = new Date(calendarView.getDate());
                 String sdate = Plant.DATE_FORMAT.format(date);
                 values.put(MyDBHelper.PlantsTable.COlUMN_WATER_TIME, sdate);
-                db.insert(MyDBHelper.PlantsTable.TABLE_NAME, null, values);
-
+                /* for maybe future image */
+                values.put(MyDBHelper.PlantsTable.COLUMN_PLANT_IMAGE, 0);
+               long success =   db.insert(MyDBHelper.PlantsTable.TABLE_NAME, null, values);
                 Intent intent = new Intent();
                 // setResult(RESULT_OK, intent);
                 finish();

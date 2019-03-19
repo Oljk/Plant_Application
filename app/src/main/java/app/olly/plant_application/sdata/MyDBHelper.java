@@ -12,7 +12,8 @@ public class MyDBHelper extends SQLiteOpenHelper {
         public final static String COLUMN_PLANT_NAME = "name";
         public final static String COLUMN_PLANT_IMAGE = "image";
         /**
-         * if null - it is plant type
+         * now it is plant type name =>
+         * if change to Plant type links - > id of choosen planttype, if null = is planttype
          */
         public final static String COLUMN_PLANT_TYPE = "ptype";
         public final static String COLUMN_ID = "id";
@@ -23,7 +24,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "plants.db";
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     public MyDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -42,9 +43,11 @@ public class MyDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+            onCreate(db);
     }
     public static void ItemDelete(SQLiteDatabase db,String id) {
+        System.out.println("hello");
         db.delete(PlantsTable.TABLE_NAME, PlantsTable.COLUMN_ID + " = ?", new String[] {id});
+        System.out.println("hello2");
     }
 }

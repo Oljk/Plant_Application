@@ -1,8 +1,12 @@
 package app.olly.plant_application;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +17,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -20,16 +25,20 @@ import app.olly.plant_application.sdata.DefaultPlant;
 import app.olly.plant_application.sdata.MyDBHelper;
 import app.olly.plant_application.sdata.Plant;
 
-public class MainActivity extends AppCompatActivity implements MyAdapter.ItemClickListener {
+public class MainActivity extends AppCompatActivity implements MyAdapter.ItemClickListener, MyAdapter.ItemLongClickListener{
     private MyDBHelper dbhelper;
     RecyclerView recyclerView;
     private MyAdapter adapter;
     RecyclerView.LayoutManager layoutManager;
+    ;
+
+    ArrayList<Plant> plants;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -47,18 +56,40 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.ItemCli
         recyclerView = findViewById(R.id.mylist);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        Plant plant = new Plant(R.drawable.first, 1000, "bodka", 1,new Date(), "ficus");
-        Plant plant2 =  new Plant(R.drawable.second, 1000, "alenka", 10,new Date(), "kaktus");
-        ArrayList<Plant> plants = new ArrayList<>();
-        plants.add(plant);
-        plants.add(plant2);
+        updateList();
+
+    }
+    private void updateList() {
+        plants = new ArrayList<>();
+        final SQLiteDatabase db = dbhelper.getReadableDatabase();
+        String query = "SELECT " + MyDBHelper.PlantsTable.COLUMN_ID  + ", " +
+                                   MyDBHelper.PlantsTable.COLUMN_PLANT_NAME + " , " +
+                                  MyDBHelper.PlantsTable.COLUMN_PLANT_TYPE + " , " +
+                                   MyDBHelper.PlantsTable.COLUMN_PERIOD + " , " +
+                                   MyDBHelper.PlantsTable.COlUMN_WATER_TIME +
+                       " FROM " + MyDBHelper.PlantsTable.TABLE_NAME +
+                       " ORDER BY " + MyDBHelper.PlantsTable.COLUMN_ID;
+        Cursor cursor = db.rawQuery(query, null);
+        while (cursor.moveToNext()) {
+            String name = cursor.getString(cursor.getColumnIndex(MyDBHelper.PlantsTable.COLUMN_PLANT_NAME));
+            int id = cursor.getInt(cursor.getColumnIndex(MyDBHelper.PlantsTable.COLUMN_ID));
+            String planttype = cursor.getString(cursor.getColumnIndex(MyDBHelper.PlantsTable.COLUMN_PLANT_TYPE));
+            int period =  cursor.getInt(cursor.getColumnIndex(MyDBHelper.PlantsTable.COLUMN_PERIOD));
+            Date water_date;
+            try {
+                water_date = Plant.DATE_FORMAT.parse(cursor.getString(cursor.getColumnIndex(MyDBHelper.PlantsTable.COlUMN_WATER_TIME)));
+            } catch (ParseException e) {
+                water_date = new Date();
+            }
+            Plant plant = new Plant(R.drawable.cactus, period, name, id, water_date, planttype);
+            plants.add(plant);
+        }
+        cursor.close();
+
         adapter = new MyAdapter(this, plants);
         adapter.setOnClickListener(this);
+        adapter.setLongClickListener(this);
         recyclerView.setAdapter(adapter);
-
-        TextView testTextView = findViewById(R.id.textView);
-        testTextView.setText(String.valueOf(recyclerView.getAdapter().getItemCount()));
-
     }
 
     @Override
@@ -68,6 +99,12 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.ItemCli
         return true;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateList();
+
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -84,6 +121,40 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.ItemCli
     }
     @Override
     public void onItemCLick(View view, int pos) {
-        Toast.makeText(this, "your: " + adapter.getItem(pos) + " pos: " + pos, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "your: " + adapter.getItem(pos).getName() + " pos: " + pos, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public boolean onLongItemCLick(View view, int position, final int id) {
+        Toast.makeText(this,"hello", Toast.LENGTH_SHORT).show();
+        final SQLiteDatabase db = dbhelper.getWritableDatabase();
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+        builder.setTitle("Editing");
+        builder.setMessage("Edit or delete?");
+
+        builder.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(MainActivity.this, EditActivity.class);
+                intent.putExtra("data", id);
+                dialog.dismiss();
+                startActivity(intent);
+            }
+        });
+
+        builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                MyDBHelper.ItemDelete(db, String.valueOf(id));
+                MainActivity.this.updateList();
+                dialog.dismiss();
+
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+        return true;
     }
 }

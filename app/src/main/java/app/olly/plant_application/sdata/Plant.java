@@ -24,6 +24,7 @@ public class Plant extends DefaultPlant {
      */
     private String plantTypeName;
 
+
     static int CONST_WEEK = 7*24*60*60;
     static int CONST_THREE_DAYS = 3*24*60*60;
     public final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyyy-mm-dd");
