@@ -119,13 +119,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>  {
         @Override
         public void onClick(View view){
             if(itemClickListener != null) {
-                itemClickListener.onItemCLick(view, getAdapterPosition());
+                itemClickListener.onItemCLick(view, plant.getName(), plant.getId());
             }
         }
     }
 
     interface ItemClickListener {
-        void onItemCLick(View view, int pos);
+        void onItemCLick(View view, String name, int id);
     }
     interface ItemLongClickListener{
         boolean onLongItemCLick(View view, int pos, int id);

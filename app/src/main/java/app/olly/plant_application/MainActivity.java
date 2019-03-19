@@ -1,5 +1,6 @@
 package app.olly.plant_application;
 
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -116,10 +117,32 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.ItemCli
         return super.onOptionsItemSelected(item);
     }
     @Override
-    public void onItemCLick(View view, int pos) {
+    public void onItemCLick(View view, String name, final int id) {
         final SQLiteDatabase db = dbhelper.getWritableDatabase();
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle("Watering");
+        builder.setMessage("Have you watered your plant?");
 
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+                ContentValues values = new ContentValues();
+                values.put(MyDBHelper.PlantsTable.COlUMN_WATER_TIME, Plant.DATE_FORMAT.format(new Date(System.currentTimeMillis())));
+                db.update(MyDBHelper.PlantsTable.TABLE_NAME, values, "id = ?", new String[] { String.valueOf(id) });
+                dialog.dismiss();
+            }
+        });
+
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     @Override
