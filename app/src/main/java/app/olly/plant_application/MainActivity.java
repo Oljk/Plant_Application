@@ -107,12 +107,8 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.ItemCli
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -121,12 +117,13 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.ItemCli
     }
     @Override
     public void onItemCLick(View view, int pos) {
-        Toast.makeText(this, "your: " + adapter.getItem(pos).getName() + " pos: " + pos, Toast.LENGTH_SHORT).show();
+        final SQLiteDatabase db = dbhelper.getWritableDatabase();
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
     }
 
     @Override
     public boolean onLongItemCLick(View view, int position, final int id) {
-        Toast.makeText(this,"hello", Toast.LENGTH_SHORT).show();
         final SQLiteDatabase db = dbhelper.getWritableDatabase();
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
@@ -137,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.ItemCli
 
             public void onClick(DialogInterface dialog, int which) {
                 Intent intent = new Intent(MainActivity.this, EditActivity.class);
-                intent.putExtra("data", id);
+                intent.putExtra("data", String.valueOf(id));
                 dialog.dismiss();
                 startActivity(intent);
             }
@@ -150,7 +147,6 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.ItemCli
                 MyDBHelper.ItemDelete(db, String.valueOf(id));
                 MainActivity.this.updateList();
                 dialog.dismiss();
-
             }
         });
         AlertDialog alert = builder.create();

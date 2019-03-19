@@ -46,8 +46,6 @@ public class MyDBHelper extends SQLiteOpenHelper {
             onCreate(db);
     }
     public static void ItemDelete(SQLiteDatabase db,String id) {
-        System.out.println("hello");
         db.delete(PlantsTable.TABLE_NAME, PlantsTable.COLUMN_ID + " = ?", new String[] {id});
-        System.out.println("hello2");
     }
 }
