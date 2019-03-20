@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">Plant_Application</string>
-    <string name="action_settings">Settings</string>
+    <string name="edit_time">Edit Time</string>
 </resources>

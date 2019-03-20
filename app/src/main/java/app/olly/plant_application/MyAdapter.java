@@ -1,28 +1,24 @@
 package app.olly.plant_application;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
 
-import app.olly.plant_application.sdata.MyDBHelper;
 import app.olly.plant_application.sdata.Plant;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>  {
     private List<Plant> mData;
-    ItemClickListener itemClickListener;
-    ItemLongClickListener longClickListener;
+    private ItemClickListener itemClickListener;
+    private ItemLongClickListener longClickListener;
 
-    public ItemLongClickListener getLongClickListener() {
+    private ItemLongClickListener getLongClickListener() {
         return longClickListener;
     }
 
@@ -76,7 +72,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>  {
         TextView TextViewPlantType;
 
 
-        public ViewHolder(@NonNull View itemView) {
+        ViewHolder(@NonNull View itemView) {
             super(itemView);
             TextViewName =  itemView.findViewById(R.id.plant_name);
             imageView = itemView.findViewById(R.id.plant_image);
@@ -90,7 +86,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>  {
 
         /**
          * for setting plant to viewHolder
-         * @param plant
+         * @param plant setted plant
          */
         public void setPlant(Plant plant) {
             this.plant = plant;
@@ -111,8 +107,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>  {
         @Override
         public boolean onLongClick(View view) {
             if(longClickListener != null) {
-               boolean a = longClickListener.onLongItemCLick(view, getAdapterPosition(), plant.getId());
-               return a;
+               return longClickListener.onLongItemCLick(view, getAdapterPosition(), plant.getId());
             }
             return true;
         }

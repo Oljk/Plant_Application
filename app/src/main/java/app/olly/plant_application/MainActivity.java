@@ -15,8 +15,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -28,12 +26,11 @@ import app.olly.plant_application.sdata.Plant;
 
 public class MainActivity extends AppCompatActivity implements MyAdapter.ItemClickListener, MyAdapter.ItemLongClickListener{
     private MyDBHelper dbhelper;
-    RecyclerView recyclerView;
+    private RecyclerView recyclerView;
     private MyAdapter adapter;
-    RecyclerView.LayoutManager layoutManager;
-    ;
+    private RecyclerView.LayoutManager layoutManager;
 
-    ArrayList<Plant> plants;
+    private ArrayList<Plant> plants;
 
 
     @Override
@@ -109,8 +106,9 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.ItemCli
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(MainActivity.this, EditNotificationTime.class);
+            startActivity(intent);
             return true;
         }
 
@@ -128,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.ItemCli
             public void onClick(DialogInterface dialog, int which) {
                 ContentValues values = new ContentValues();
                 values.put(MyDBHelper.PlantsTable.COlUMN_WATER_TIME, Plant.DATE_FORMAT.format(new Date(System.currentTimeMillis())));
-                db.update(MyDBHelper.PlantsTable.TABLE_NAME, values, "id = ?", new String[] { String.valueOf(id) });
+                db.update(MyDBHelper.PlantsTable.TABLE_NAME, values, MyDBHelper.PlantsTable.COLUMN_ID + " = ?", new String[] { String.valueOf(id) });
                 dialog.dismiss();
             }
         });
@@ -167,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.ItemCli
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                MyDBHelper.ItemDelete(db, String.valueOf(id));
+                MyDBHelper.ItemPlantDelete(db, String.valueOf(id));
                 MainActivity.this.updateList();
                 dialog.dismiss();
             }

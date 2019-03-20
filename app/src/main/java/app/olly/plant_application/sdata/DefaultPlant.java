@@ -9,12 +9,13 @@ public abstract class DefaultPlant {
     /**
      * Generating id for unique objects
      */
-        int id;
+          int id;
 
         /**
          * image of item
 
          * */
+        @SuppressWarnings("WeakerAccess")
         int image;
 
         /**

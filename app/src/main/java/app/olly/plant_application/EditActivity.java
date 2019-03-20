@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -28,7 +27,7 @@ public class EditActivity extends AppCompatActivity implements CalendarView.OnDa
 
     private MyDBHelper dbhelper;
     private Boolean isCreate;
-    Calendar calendar;
+    private Calendar calendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +71,7 @@ public class EditActivity extends AppCompatActivity implements CalendarView.OnDa
                 calendarView.setDate(Pwater_date.getTime());
             }
             cursor.close();
-            dbhelper.ItemDelete(db, intentData);
+            MyDBHelper.ItemPlantDelete(db, intentData);
         }
 
 
