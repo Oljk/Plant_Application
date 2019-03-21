@@ -1,7 +1,11 @@
 package app.olly.plant_application.sdata;
 
+import android.text.method.HideReturnsTransformationMethod;
+
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import app.olly.plant_application.R;
 
@@ -27,7 +31,7 @@ public class Plant extends DefaultPlant {
 
     public static int CONST_WEEK = 7*24*60*60;
     public static int CONST_THREE_DAYS = 3*24*60*60;
-    public final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyyy-mm-dd");
+    public final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
     public Plant(int period, int id) {
         this.period = period;
@@ -40,6 +44,24 @@ public class Plant extends DefaultPlant {
         this.plantTypeName = plantTypeName;
     }
 
+    /**
+     *
+     * @return true if plant need water
+     */
+    public boolean checkNeedWater() {
+        Calendar curtime = new GregorianCalendar();
+        curtime.setTime(new Date(System.currentTimeMillis()));
+        Calendar c = new GregorianCalendar();
+        c.setTime(getLast_time());
+        c.add(Calendar.DATE, getPeriod());
+        if (c.before(curtime)) {
+          return true;
+        }
+        if (c.get(Calendar.YEAR) == curtime.get(Calendar.YEAR) && c.get(Calendar.DAY_OF_MONTH) == curtime.get(Calendar.DAY_OF_MONTH) && c.get(Calendar.MONTH) == curtime.get(Calendar.MONTH)) {
+            return true;
+        }
+        return false;
+    }
     public Plant(PlantType plantType, int image, int period, String name, int id) {
         super(image, period, name, id);
         setPlantType(plantType);

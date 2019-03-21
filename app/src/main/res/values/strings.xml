@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Plant_Application</string>
     <string name="edit_time">Edit Time</string>
+    <string name="notify">Enable notifications</string>
 </resources>

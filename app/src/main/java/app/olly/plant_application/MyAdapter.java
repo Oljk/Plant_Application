@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import app.olly.plant_application.sdata.Plant;
@@ -70,6 +72,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>  {
         TextView TextViewName;
         ImageView imageView;
         TextView TextViewPlantType;
+        TextView lastWaterDay;
+        TextView nextWaterDay;
+        View item;
 
 
         ViewHolder(@NonNull View itemView) {
@@ -77,10 +82,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>  {
             TextViewName =  itemView.findViewById(R.id.plant_name);
             imageView = itemView.findViewById(R.id.plant_image);
             TextViewPlantType = itemView.findViewById(R.id.plant_type);
+            lastWaterDay = itemView.findViewById(R.id.last_date);
+            nextWaterDay = itemView.findViewById(R.id.date_for_water);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
             itemView.setLongClickable(true);
             itemView.setClickable(true);
+            item = itemView;
         }
 
 
@@ -101,6 +109,16 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>  {
             TextViewName.setText(plant.getName());
             TextViewPlantType.setText(plant.getPlantTypeName());
             imageView.setImageResource(plant.getImage());
+            lastWaterDay.setText("last water: " + Plant.DATE_FORMAT.format(plant.getLast_time()));
+            Calendar c = new GregorianCalendar();
+            c.setTime(plant.getLast_time());
+            c.add(Calendar.DATE, plant.getPeriod());
+            nextWaterDay.setText("next water: " + Plant.DATE_FORMAT.format(c.getTime()));
+            if (plant.checkNeedWater()) {
+                item.setBackgroundResource(R.color.ActiveListItem);
+            } else {
+                item.setBackgroundResource(R.color.White);
+            }
         }
 
 

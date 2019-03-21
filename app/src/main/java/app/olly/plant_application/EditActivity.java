@@ -38,7 +38,7 @@ public class EditActivity extends AppCompatActivity implements CalendarView.OnDa
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Intent intent = getIntent();
-        String intentData = intent.getStringExtra("data");
+        final String intentData = intent.getStringExtra("data");
         isCreate = DefaultPlant.CONST_CREATE.equals(intentData);
         final TextView name = findViewById(R.id.name_edit);
         final TextView planttype = findViewById(R.id.type_edit);
@@ -71,7 +71,6 @@ public class EditActivity extends AppCompatActivity implements CalendarView.OnDa
                 calendarView.setDate(Pwater_date.getTime());
             }
             cursor.close();
-            MyDBHelper.ItemPlantDelete(db, intentData);
         }
 
 
@@ -80,10 +79,10 @@ public class EditActivity extends AppCompatActivity implements CalendarView.OnDa
             @Override
             public void onClick(View view) {
                 long numberOfRows = DatabaseUtils.queryNumEntries(db, MyDBHelper.PlantsTable.TABLE_NAME);
-                int id = DefaultPlant.generateNewId((int) numberOfRows);
+
                 ContentValues values = new ContentValues();
                 values.put(MyDBHelper.PlantsTable.COLUMN_PLANT_NAME, name.getText().toString());
-                values.put(MyDBHelper.PlantsTable.COLUMN_ID, id);
+
                 values.put(MyDBHelper.PlantsTable.COLUMN_PLANT_TYPE, planttype.getText().toString());
                 values.put(MyDBHelper.PlantsTable.COLUMN_PERIOD, time.getText().toString());
                 Date date = (calendar != null)?calendar.getTime():new Date(calendarView.getDate());
@@ -91,7 +90,13 @@ public class EditActivity extends AppCompatActivity implements CalendarView.OnDa
                 values.put(MyDBHelper.PlantsTable.COlUMN_WATER_TIME, sdate);
                 /* for maybe future image */
                 values.put(MyDBHelper.PlantsTable.COLUMN_PLANT_IMAGE, 0);
-               long success =   db.insert(MyDBHelper.PlantsTable.TABLE_NAME, null, values);
+                if (isCreate) {
+                    int id = DefaultPlant.generateNewId((int) numberOfRows);
+                    values.put(MyDBHelper.PlantsTable.COLUMN_ID, id);
+                    long success = db.insert(MyDBHelper.PlantsTable.TABLE_NAME, null, values);
+                } else {
+                    long success =   db.update(MyDBHelper.PlantsTable.TABLE_NAME, values, "id = ?" , new String[]{intentData});
+                }
                 Intent intent = new Intent();
                 // setResult(RESULT_OK, intent);
                 finish();

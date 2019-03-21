@@ -12,6 +12,9 @@ public class MyDBHelper extends SQLiteOpenHelper {
     public final static String CONST_TIME_DEFAULT_HOURS = "12";
     public final static String CONST_TIME_DEFAULT_MINUTES = "0";
 
+    public final static String CONST_ENABLE_NOTIFICATIONS_TITLE = "notifications";
+
+
     public static final class PlantsTable implements BaseColumns {
         public final static String TABLE_NAME = "plants";
         public final static String COLUMN_PLANT_NAME = "name";
@@ -33,7 +36,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "plants.db";
 
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
 
     public MyDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -61,6 +64,10 @@ public class MyDBHelper extends SQLiteOpenHelper {
         values.put(ConstsTable.COLUMN_NAME, CONST_TIME_NAME);
         values.put(ConstsTable.COLUMN_DATA, time);
         long success =   db.insert(ConstsTable.TABLE_NAME, null, values);
+        values.clear();
+        values.put(ConstsTable.COLUMN_NAME, CONST_ENABLE_NOTIFICATIONS_TITLE);
+        values.put(ConstsTable.COLUMN_DATA, "0");
+        success =   db.insert(ConstsTable.TABLE_NAME, null, values);
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

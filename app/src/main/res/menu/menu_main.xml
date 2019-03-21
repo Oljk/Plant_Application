@@ -3,8 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="app.olly.plant_application.MainActivity">
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/edit_time"
+    android:id="@+id/edit_time_action"
+    android:orderInCategory="100"
+    android:title="@string/edit_time"
+    app:showAsAction="never" />
+    <item
+        android:id="@+id/action_notifications"
+        android:orderInCategory="101"
+        android:title="@string/notify"
         app:showAsAction="never" />
 </menu>

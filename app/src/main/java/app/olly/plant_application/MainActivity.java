@@ -1,6 +1,7 @@
 package app.olly.plant_application;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -22,6 +23,7 @@ import java.util.Date;
 
 import app.olly.plant_application.sdata.DefaultPlant;
 import app.olly.plant_application.sdata.MyDBHelper;
+import app.olly.plant_application.sdata.NotificationHelper;
 import app.olly.plant_application.sdata.Plant;
 
 public class MainActivity extends AppCompatActivity implements MyAdapter.ItemClickListener, MyAdapter.ItemLongClickListener{
@@ -55,6 +57,8 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.ItemCli
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         updateList();
+
+
 
     }
     private void updateList() {
@@ -94,7 +98,25 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.ItemCli
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
         return true;
+    }
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        final SQLiteDatabase db = dbhelper.getWritableDatabase();
+        String query = "SELECT " + MyDBHelper.ConstsTable.COLUMN_DATA +
+                " FROM " + MyDBHelper.ConstsTable.TABLE_NAME +
+                " WHERE " + MyDBHelper.ConstsTable.COLUMN_NAME+ " ='" + MyDBHelper.CONST_ENABLE_NOTIFICATIONS_TITLE + "'" ;
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToNext()) {
+            if(!"1".equals(cursor.getString(cursor.getColumnIndex(MyDBHelper.ConstsTable.COLUMN_DATA)))) {
+                menu.findItem(R.id.action_notifications).setTitle("Disable notifications");
+            } else  {
+                menu.findItem(R.id.action_notifications).setTitle("Enable notifications");
+            }
+        }
+        cursor.close();
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -105,10 +127,54 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.ItemCli
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Context context = getApplicationContext();
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.edit_time_action) {
             Intent intent = new Intent(MainActivity.this, EditNotificationTime.class);
             startActivity(intent);
+            return true;
+        }
+        if (id == R.id.action_notifications) {
+            boolean isEnable = false;
+            final SQLiteDatabase db = dbhelper.getWritableDatabase();
+            String query = "SELECT " + MyDBHelper.ConstsTable.COLUMN_DATA +
+                    " FROM " + MyDBHelper.ConstsTable.TABLE_NAME +
+                    " WHERE " + MyDBHelper.ConstsTable.COLUMN_NAME+ " ='" + MyDBHelper.CONST_ENABLE_NOTIFICATIONS_TITLE + "'" ;
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor.moveToNext()) {
+                isEnable = "1".equals(cursor.getString(cursor.getColumnIndex(MyDBHelper.ConstsTable.COLUMN_DATA)));
+            }
+            cursor.close();
+
+            String enabled;
+            if (isEnable) {
+                // when notifications was enable, so we should it disable
+                NotificationHelper.cancelAlarmRTC();
+               // NotificationHelper.disableBootReceiver(context);
+                item.setTitle("Enable notifications");
+                enabled = "0";
+            } else {
+                query = "SELECT " + MyDBHelper.ConstsTable.COLUMN_DATA +
+                        " FROM " + MyDBHelper.ConstsTable.TABLE_NAME +
+                        " WHERE " + MyDBHelper.ConstsTable.COLUMN_NAME+ " ='" + MyDBHelper.CONST_TIME_NAME + "'" ;
+                 cursor = db.rawQuery(query, null);
+                 String cur_time = "0:0";
+                if (cursor.moveToNext()) {
+                    cur_time = cursor.getString(cursor.getColumnIndex(MyDBHelper.ConstsTable.COLUMN_DATA));
+                }
+                cursor.close();
+                String[] times = cur_time.split(MyDBHelper.CONST_TIME_SEPARATOP);
+                int hoursInt = Integer.parseInt(times[0]);
+                int minInt = Integer.parseInt(times[1]);
+                NotificationHelper.scheduleRepeatingRTCNotification(context, hoursInt, minInt);
+               // NotificationHelper.enableBootReceiver(context);
+                item.setTitle("Disable notifications");
+                enabled = "1";
+            }
+            //update notifications status in database
+            ContentValues values = new ContentValues();
+            values.put(MyDBHelper.ConstsTable.COLUMN_DATA, enabled);
+            long status = db.update(MyDBHelper.ConstsTable.TABLE_NAME, values, MyDBHelper.ConstsTable.COLUMN_NAME + " = ?", new String[]{MyDBHelper.CONST_ENABLE_NOTIFICATIONS_TITLE});
             return true;
         }
 
@@ -127,6 +193,7 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.ItemCli
                 ContentValues values = new ContentValues();
                 values.put(MyDBHelper.PlantsTable.COlUMN_WATER_TIME, Plant.DATE_FORMAT.format(new Date(System.currentTimeMillis())));
                 db.update(MyDBHelper.PlantsTable.TABLE_NAME, values, MyDBHelper.PlantsTable.COLUMN_ID + " = ?", new String[] { String.valueOf(id) });
+                updateList();
                 dialog.dismiss();
             }
         });
@@ -141,6 +208,7 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.ItemCli
 
         AlertDialog alert = builder.create();
         alert.show();
+
     }
 
     @Override

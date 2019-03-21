@@ -13,7 +13,7 @@ import android.widget.EditText;
 
 
 import app.olly.plant_application.sdata.MyDBHelper;
-
+import app.olly.plant_application.sdata.NotificationHelper;
 
 
 public class EditNotificationTime extends AppCompatActivity {
@@ -38,8 +38,8 @@ public class EditNotificationTime extends AppCompatActivity {
             dbhelper.createTime(db);
         }
         cursor.close();
-        String[] times = cur_time.split(MyDBHelper.CONST_TIME_SEPARATOP);
-        if (times[0].length() < 2) times[1] = "0" + times[1];
+        final String[] times = cur_time.split(MyDBHelper.CONST_TIME_SEPARATOP);
+        if (times[0].length() < 2) times[0] = "0" + times[0];
         hours.setText(times[0]);
         if (times[1].length() < 2) times[1] = "0" + times[1];
         minutes.setText(times[1] );
@@ -77,6 +77,19 @@ public class EditNotificationTime extends AppCompatActivity {
                     ContentValues values = new ContentValues();
                     values.put(MyDBHelper.ConstsTable.COLUMN_DATA, time);
                    long status = db.update(MyDBHelper.ConstsTable.TABLE_NAME, values, MyDBHelper.ConstsTable.COLUMN_NAME + " = ?", new String[]{MyDBHelper.CONST_TIME_NAME});
+                    boolean isEnable = false;
+                   String query = "SELECT " + MyDBHelper.ConstsTable.COLUMN_DATA +
+                            " FROM " + MyDBHelper.ConstsTable.TABLE_NAME +
+                            " WHERE " + MyDBHelper.ConstsTable.COLUMN_NAME+ " ='" + MyDBHelper.CONST_ENABLE_NOTIFICATIONS_TITLE + "'" ;
+                    Cursor cursor = db.rawQuery(query, null);
+                    if (cursor.moveToNext()) {
+                        isEnable = "1".equals(cursor.getString(cursor.getColumnIndex(MyDBHelper.ConstsTable.COLUMN_DATA)));
+                    }
+                    cursor.close();
+                   if (isEnable) {
+                       NotificationHelper.scheduleRepeatingRTCNotification(getApplicationContext(), hoursInt, minInt);
+                      // NotificationHelper.enableBootReceiver(getApplicationContext());
+                   }
                     finish();
 
                 } else {

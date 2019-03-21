@@ -48,7 +48,7 @@
 
     <EditText
         android:id="@+id/hours"
-        android:layout_width="71dp"
+        android:layout_width="59dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="104dp"
         android:layout_marginTop="84dp"
@@ -57,16 +57,17 @@
         android:ems="10"
         android:inputType="number"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/two_dotes"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.045"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_confirm_time"
-        app:layout_constraintVertical_bias="0.005" />
+        app:layout_constraintVertical_bias="0.029" />
 
     <EditText
         android:id="@+id/minutes"
-        android:layout_width="71dp"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="84dp"
         android:layout_marginEnd="128dp"
         android:layout_marginBottom="8dp"
@@ -74,20 +75,24 @@
         android:inputType="number"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/two_dotes"
         app:layout_constraintTop_toBottomOf="@+id/text_confirm_time"
-        app:layout_constraintVertical_bias="0.005" />
+        app:layout_constraintVertical_bias="0.029" />
 
     <TextView
         android:id="@+id/two_dotes"
-        android:layout_width="9dp"
+        android:layout_width="29dp"
         android:layout_height="53dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text=":"
         android:textSize="40sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/minutes"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.046"
+        app:layout_constraintStart_toEndOf="@+id/hours"
         app:layout_constraintTop_toBottomOf="@+id/text_confirm_time"
-        app:layout_constraintVertical_bias="0.169" />
+        app:layout_constraintVertical_bias="0.208" />
 </android.support.constraint.ConstraintLayout>
