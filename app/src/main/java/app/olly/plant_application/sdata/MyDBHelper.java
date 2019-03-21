@@ -36,7 +36,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "plants.db";
 
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 1;
 
     public MyDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -71,8 +71,6 @@ public class MyDBHelper extends SQLiteOpenHelper {
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-     //  db.execSQL("DROP TABLE IF EXISTS '" + PlantsTable.TABLE_NAME + "'");
-       // db.execSQL("DROP TABLE IF EXISTS '" + ConstsTable.TABLE_NAME  + "'");
             onCreate(db);
     }
     public static void ItemPlantDelete(SQLiteDatabase db, String id) {
